@@ -88,22 +88,24 @@ let game;
 });
 
 describe('league app', function () {
-  const readFileSyncStub = sinon.stub(fs, 'readFileSync');
-  readFileSyncStub.withArgs('fileName.fileType', 'utf-8').returns(JSON.stringify([['Player1'], ['Player2', 'Player3']]))
-
   it('loads in existing league', function() {
-      const game = app.startGame();
-      game.sendCommand('load fileName.fileType')
-      
-      expect(game.sendCommand('print')).to.equals(
-        '          -------------------\n'
-        + '          |     Player1     |\n'
-        + '          -------------------\n'
-        + '------------------- -------------------\n'
-        + '|     Player2     | |     Player3     |\n'
-        + '------------------- -------------------'
-      );
+    const readFileSyncStub = sinon.stub(fs, 'readFileSync');
+    readFileSyncStub.withArgs('fileName.fileType', 'utf8').returns(JSON.stringify([['Player1'], ['Player2', 'Player3']]))
+    
+    const game = app.startGame();
+    game.sendCommand('load fileName.fileType')
+    
+    expect(game.sendCommand('print')).to.equals(
+      '          -------------------\n'
+      + '          |     Player1     |\n'
+      + '          -------------------\n'
+      + '------------------- -------------------\n'
+      + '|     Player2     | |     Player3     |\n'
+      + '------------------- -------------------'
+    );
+    
+    readFileSyncStub.restore();
   });
 
-  readFileSyncStub.restore();
+  
 });

@@ -85,6 +85,10 @@ let game;
 
     expect(game.sendCommand('record win Player1 Player1')).to.equal('Cannot record match result. Winner \'Player1\' must be one row below loser \'Player1\'')
   })
+
+  it('prints error after incorrect command', function() {
+    expect(game.sendCommand('Hello World!')).to.equal('Unknown command "Hello World!"')
+  })
 });
 
 describe('league app', function () {
@@ -107,5 +111,19 @@ describe('league app', function () {
     readFileSyncStub.restore();
   });
 
-  
+  it('saves league', function() {
+    const fsMock = this.sinon.mock(fs);
+    fsMock.expects('writeFileSync').once().withArgs('fileName.fileType',
+      JSON.stringify([['Player1'], ['Player2', 'Player3']]),
+      { flag: 'w' }
+    )
+
+    const game = app.startGame(gameState.createLeague());
+    game.sendCommand('add player Player1');
+    game.sendCommand('add player Player2');
+    game.sendCommand('add player Player3');
+    game.sendCommand('save fileName.fileType')
+    
+    fsMock.verify();
+  })
 });

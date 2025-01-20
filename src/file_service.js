@@ -16,7 +16,10 @@ exports.save = function (path, league) {
 
 exports.load = function (path) {
   try {
-    return gameState.load(JSON.parse(fs.readFileSync(path, 'utf8')));
+    const state = gameState.load(JSON.parse(fs.readFileSync(path, 'utf8')));
+    
+    console.log(state);
+    return state;
   } catch (e) {
     if (e instanceof SyntaxError) {
       throw new InvalidArgumentException(`File is not valid JSON: ${path}`);
